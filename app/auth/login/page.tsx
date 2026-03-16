@@ -26,15 +26,14 @@ export default function Page() {
     setIsLoading(true)
     setError(null)
 
-    // Auth is "disabled" - we simply bypass the Supabase call
     try {
-      // Artificial delay to mimic a network request (optional)
+      // Simulate a brief loading state for realism
       await new Promise((resolve) => setTimeout(resolve, 500))
       
-      // Redirect straight to dashboard
+      // Bypass: Force navigation to dashboard
       router.push('/dashboard')
-    } catch (error: unknown) {
-      setError('An unexpected error occurred')
+    } catch (err: unknown) {
+      setError('An error occurred during bypass')
     } finally {
       setIsLoading(false)
     }
@@ -46,9 +45,9 @@ export default function Page() {
         <div className="flex flex-col gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-2xl">Login (Bypass Enabled)</CardTitle>
+              <CardTitle className="text-2xl">Login (Bypassed)</CardTitle>
               <CardDescription>
-                Enter any details to continue to the dashboard.
+                Auth is disabled. Click Login to enter the dashboard.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -77,18 +76,15 @@ export default function Page() {
                   </div>
                   {error && <p className="text-sm text-red-500">{error}</p>}
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? 'Bypassing...' : 'Login'}
+                    {isLoading ? 'Entering...' : 'Login'}
                   </Button>
                 </div>
-                <div className="mt-4 text-center text-sm">
-                  Don&apos;t have an account?{' '}
-                  <Link
-                    href="/auth/sign-up"
-                    className="underline underline-offset-4"
-                  >
-                    Sign up
-                  </Link>
-                </div>
+                //<div className="mt-4 text-center text-sm">
+                 // Don&apos;t have an account?{' '}
+                 // <Link href="/auth/sign-up" className="underline underline-offset-4">
+                   // Sign up
+                  //</Link>
+               // </div>
               </form>
             </CardContent>
           </Card>
