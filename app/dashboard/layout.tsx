@@ -9,10 +9,10 @@ export default async function DashboardLayout({
 }) {
   const supabase = await createClient()
 
-  const { data, error } = await supabase.auth.getUser()
-  if (error || !data?.user) {
-    redirect('/auth/login')
-  }
+  // const { data, error } = await supabase.auth.getUser()
+  // if (error || !data?.user) {
+  //   redirect('/auth/login')
+  // }
 
   return <>{children}</>
 }
