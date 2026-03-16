@@ -22,32 +22,26 @@ export async function addSolarProject(data: SolarProjectInput) {
   try {
     const supabase = await createClient();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return { error: 'User not authenticated' };
-    }
-
     const { error, data: project } = await supabase
       .from('solar_projects')
       .insert({
         ...data,
-        user_id: user.id,
+        // user_id is optional — can be removed or kept as null
+        // user_id: null,           // ← uncomment if you want to explicitly set it to null
       })
       .select()
       .single();
 
     if (error) {
       console.error('Error adding solar project:', error);
-      // If table doesn't exist, provide helpful message
+
       if (error.message?.includes('relations') || error.message?.includes('does not exist')) {
         return {
           error:
             'Solar projects table needs to be created. Please check the SETUP.md instructions to run the database migration.',
         };
       }
+
       return { error: error.message || 'Failed to add solar project' };
     }
 
@@ -63,18 +57,9 @@ export async function getSolarProjects() {
   try {
     const supabase = await createClient();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return { error: 'User not authenticated', data: null };
-    }
-
     const { data, error } = await supabase
       .from('solar_projects')
       .select('*')
-      .eq('user_id', user.id)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -93,19 +78,10 @@ export async function deleteSolarProject(projectId: string) {
   try {
     const supabase = await createClient();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return { error: 'User not authenticated' };
-    }
-
     const { error } = await supabase
       .from('solar_projects')
       .delete()
-      .eq('id', projectId)
-      .eq('user_id', user.id);
+      .eq('id', projectId);
 
     if (error) {
       console.error('Error deleting solar project:', error);
@@ -127,19 +103,10 @@ export async function updateSolarProject(
   try {
     const supabase = await createClient();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return { error: 'User not authenticated' };
-    }
-
     const { error, data: project } = await supabase
       .from('solar_projects')
       .update(data)
       .eq('id', projectId)
-      .eq('user_id', user.id)
       .select()
       .single();
 
