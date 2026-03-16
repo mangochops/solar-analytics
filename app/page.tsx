@@ -1,18 +1,18 @@
-import { createClient } from '@/lib/supabase/server'
+//import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
 export default async function Home() {
-  const supabase = await createClient()
+  //const supabase = await createClient()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  //const {
+    //data: { user },
+ // } = await supabase.auth.getUser()
 
-  if (user) {
-    redirect('/dashboard')
-  }
+  //if (user) {
+    //redirect('/dashboard')
+  //}
 
   return (
     <main className="min-h-screen bg-background flex items-center justify-center px-4">
