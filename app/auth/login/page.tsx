@@ -1,6 +1,5 @@
 'use client'
 
-import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -24,19 +23,18 @@ export default function Page() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    const supabase = createClient()
     setIsLoading(true)
     setError(null)
 
+    // Auth is "disabled" - we simply bypass the Supabase call
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-      if (error) throw error
+      // Artificial delay to mimic a network request (optional)
+      await new Promise((resolve) => setTimeout(resolve, 500))
+      
+      // Redirect straight to dashboard
       router.push('/dashboard')
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : 'An error occurred')
+      setError('An unexpected error occurred')
     } finally {
       setIsLoading(false)
     }
@@ -48,9 +46,9 @@ export default function Page() {
         <div className="flex flex-col gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-2xl">Login</CardTitle>
+              <CardTitle className="text-2xl">Login (Bypass Enabled)</CardTitle>
               <CardDescription>
-                Enter your email below to login to your account
+                Enter any details to continue to the dashboard.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -79,7 +77,7 @@ export default function Page() {
                   </div>
                   {error && <p className="text-sm text-red-500">{error}</p>}
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? 'Logging in...' : 'Login'}
+                    {isLoading ? 'Bypassing...' : 'Login'}
                   </Button>
                 </div>
                 <div className="mt-4 text-center text-sm">
